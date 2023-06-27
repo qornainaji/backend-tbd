@@ -3,10 +3,10 @@ const controller = require('./controller');
 
 const router = Router();
 
-router.get('/', controller.getBook);
+// router.get('/', controller.getBook);
 router.post('/', controller.addBook);
-router.get('/:id', controller.getBookById);
-router.put('/:id', controller.updateBook);
-router.delete('/:id', controller.deleteBook);
+router.get('/:book_no', controller.getBookById);
+router.put('/:book_no', controller.updateBook);
+router.delete('/:book_no', controller.deleteBook);
 
 module.exports = router;

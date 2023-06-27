@@ -1,9 +1,9 @@
 const getBook = "SELECT * FROM book";
-const getBookById = "SELECT * FROM book WHERE id = $1";
-const checkTitleExists = 'SELECT * FROM book s WHERE s.title = $1'
-const addBook = 'INSERT INTO book (id, title, auth_id, publication_year, pages, price, pub_id, last_update) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)'
-const deleteBook = 'DELETE FROM book WHERE id = $1';
-const updateBook = 'UPDATE book SET title = $1, auth_id = $2, publication_year = $3, pages = $4, price = $5, pub_id = $6, last_update = $7 WHERE id = $8';
+const getBookById = "SELECT * FROM BOOK WHERE book_no = $1";
+const checkTitleExists = 'SELECT * FROM BOOK s WHERE s.book_name = $1'
+const addBook = 'INSERT INTO BOOK(book_no, book_name, book_pubyear, book_pages, book_pub_name, book_store_id) VALUES ($1, $2, $3, $4, $5, $6)'
+const deleteBook = 'DELETE FROM BOOK WHERE book_no = $1';
+const updateBook = 'UPDATE book SET book_name = $2, book_pubyear = $3, book_pages = $4, book_pub_name = $5, book_store_id = $6 WHERE book_no = $1';
 
 module.exports = {
     getBook,
