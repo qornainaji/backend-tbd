@@ -6,6 +6,13 @@ const pool = require('./db');
 const app = express();
 const port = 3001;
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Replace with your application's domain
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -40,7 +47,9 @@ app.put('/api/book/:book_no', async (req, res) => {
       await pool.query('UPDATE book SET book_name = $2, book_pubyear = $3, book_pages = $4, book_pub_name = $5, book_store_id = $6 WHERE book_no = $1', [book_no, book_name, book_pubyear, book_pages, book_pub_name, book_store_id]);
   
       res.status(200).send(`Book updated with ID: ${book_no}`);
+      console.log(req.body);
     } catch (error) {
+      console.log(req.body);
       res.status(500).send("An error occurred while updating the book.");
     }
   });
@@ -49,7 +58,7 @@ app.post('/api/book', async (req, res) => {
     try {
       const { book_no, book_name, book_pubyear, book_pages, book_pub_name, book_store_id } = req.body;
   
-      const { rows } = await pool.query('SELECT * FROM BOOK s WHERE s.book_name = $1', [book_name]);
+      const { rows } = await pool.query('SELECT * FROM BOOK s WHERE s.book_no = $1', [book_no]);
       if (rows.length) {
         return res.send("Book already exists.");
       }
@@ -57,7 +66,9 @@ app.post('/api/book', async (req, res) => {
       await pool.query('INSERT INTO BOOK(book_no, book_name, book_pubyear, book_pages, book_pub_name, book_store_id) VALUES ($1, $2, $3, $4, $5, $6)', [book_no, book_name, book_pubyear, book_pages, book_pub_name, book_store_id]);
   
       res.status(201).send(`Book added with title: ${book_name}`);
+      console.log(req.body);
     } catch (error) {
+      console.log(req.body);
       res.status(500).send("An error occurred while adding the book.");
     }
   });
