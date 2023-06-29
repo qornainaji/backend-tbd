@@ -86,7 +86,9 @@ app.get('/api/book/:book_no', async (req, res) => {
   });
 
 app.delete('/api/book/:book_no', async (req, res) => {
+  const client = await pool.connect();
   try {
+      await client.query('BEGIN');
       const book_no = parseInt(req.params.book_no);
       const results = await pool.query("SELECT * FROM BOOK WHERE book_no = $1", [book_no]);
       const noBookFound = !results.rows.length;
@@ -97,8 +99,12 @@ app.delete('/api/book/:book_no', async (req, res) => {
       
       await pool.query('DELETE FROM BOOK WHERE book_no = $1', [book_no]);
       res.status(200).send(`Book deleted with id: ${book_no}`);
+      await client.query('COMMIT');
   } catch (error) {
+      await client.query('ROLLBACK');
       throw error;
+  } finally {
+      client.release();
   }
 });
 
